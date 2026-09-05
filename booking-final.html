@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Σπύρος Αλέξανδρος Ψαρρής — Ραντεβού</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#F6FAFB;
+    --panel:#EEF6F5;
+    --line:#D7E7E5;
+    --line-soft:#E6F1F0;
+    --accent:#4F8385;
+    --accent-deep:#2C4A4C;
+    --accent-pale:#DCEBEA;
+    --ink:#28403F;
+    --ink-soft:#5C7472;
+    --sand:#C9A876;
+    --danger:#B4573F;
+    --radius:10px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .page{
+    max-width:600px;
+    margin:0 auto;
+    padding:48px 24px 80px;
+  }
+
+  header.hero{
+    text-align:center;
+    margin-bottom:40px;
+    animation:fadeUp 0.7s ease both;
+  }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .brand{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size:30px;
+    letter-spacing:0.01em;
+    color:var(--accent-deep);
+    margin:0;
+    line-height:1.2;
+  }
+
+  .tagline{
+    font-size:14px;
+    color:var(--ink-soft);
+    margin:6px 0 0;
+    letter-spacing:0.01em;
+  }
+
+  .location-tabs{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin:28px 0 0;
+  }
+
+  .loc-btn{
+    font-family:'Inter', sans-serif;
+    font-size:14px;
+    font-weight:500;
+    padding:9px 22px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .loc-btn.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+
+  section.block{
+    margin-top:44px;
+  }
+
+  .block-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:16px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .block-title{
+    font-family:'Cormorant Garamond', serif;
+    font-size:24px;
+    font-weight:500;
+    color:var(--accent-deep);
+    margin:0;
+  }
+
+  .block-hint{
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+
+  /* Treatments */
+  .treatment{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+    padding:16px 14px;
+    border-radius:var(--radius);
+    border-left:3px solid transparent;
+    cursor:pointer;
+    transition:background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .treatment:hover{ background:var(--line-soft); }
+
+  .treatment.selected{
+    background:var(--accent-pale);
+    border-left-color:var(--accent);
+  }
+
+  .treatment-name{
+    font-size:15.5px;
+    font-weight:500;
+    color:var(--ink);
+    margin:0 0 4px;
+  }
+
+  .treatment-desc{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin:0;
+    line-height:1.5;
+  }
+
+  .treatment-price{
+    font-size:16px;
+    font-weight:600;
+    color:var(--accent-deep);
+    white-space:nowrap;
+    padding-top:1px;
+  }
+
+  /* Calendar */
+  .cal-nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+  }
+
+  .cal-nav button{
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--accent-deep);
+    width:32px;
+    height:32px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    line-height:1;
+  }
+
+  .cal-nav button:disabled{
+    opacity:0.3;
+    cursor:default;
+  }
+
+  .cal-month-label{
+    font-family:'Cormorant Garamond', serif;
+    font-size:18px;
+    font-weight:600;
+    color:var(--ink);
+  }
+
+  .cal-grid{
+    display:grid;
+    grid-template-columns:repeat(7, 1fr);
+    gap:6px;
+  }
+
+  .cal-dow{
+    text-align:center;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    padding-bottom:4px;
+  }
+
+  .cal-day{
+    aspect-ratio:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    border-radius:8px;
+    color:var(--ink-soft);
+    position:relative;
+  }
+
+  .cal-day.empty{ visibility:hidden; }
+
+  .cal-day.available{
+    color:var(--ink);
+    background:var(--line-soft);
+    cursor:pointer;
+    font-weight:500;
+  }
+
+  .cal-day.available:hover{ background:var(--accent-pale); }
+
+  .cal-day.selected{
+    background:var(--accent);
+    color:#fff;
+  }
+
+  .cal-day.today::after{
+    content:'';
+    position:absolute;
+    bottom:5px;
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:var(--sand);
+  }
+
+  .cal-day.selected.today::after{ background:#fff; }
+
+  /* Time slots */
+  .slots-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
+  }
+
+  .slot{
+    padding:10px 8px;
+    text-align:center;
+    font-size:14px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    cursor:pointer;
+    color:var(--ink);
+    background:#fff;
+    transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .slot:hover{ border-color:var(--accent); }
+
+  .slot.selected{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+
+  .slot.booked{
+    color:#B7BFBE;
+    text-decoration:line-through;
+    border-color:var(--line-soft);
+    cursor:default;
+    background:var(--line-soft);
+  }
+
+  .slots-empty{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    padding:8px 2px;
+  }
+
+  /* Form */
+  .field{
+    margin-bottom:16px;
+  }
+
+  .field label{
+    display:block;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+
+  .field input{
+    width:100%;
+    padding:11px 13px;
+    font-size:15px;
+    font-family:'Inter', sans-serif;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fff;
+    color:var(--ink);
+  }
+
+  .field input:focus{
+    outline:none;
+    border-color:var(--accent);
+  }
+
+  .field-error{
+    font-size:12.5px;
+    color:var(--danger);
+    margin-top:5px;
+    display:none;
+  }
+
+  .field.has-error input{ border-color:var(--danger); }
+  .field.has-error .field-error{ display:block; }
+
+  .summary-strip{
+    background:var(--panel);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    margin-bottom:24px;
+    line-height:1.7;
+  }
+
+  .summary-strip strong{ color:var(--ink); font-weight:500; }
+
+  .cta{
+    width:100%;
+    padding:15px;
+    background:var(--accent-deep);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:15.5px;
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    cursor:pointer;
+    transition:background 0.15s ease, opacity 0.15s ease;
+  }
+
+  .cta:hover{ background:var(--accent); }
+
+  .cta:disabled{
+    background:var(--line);
+    color:var(--ink-soft);
+    cursor:default;
+  }
+
+  .form-hint{
+    text-align:center;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:10px;
+  }
+
+  /* Confirmation */
+  .confirm{
+    text-align:center;
+    padding:48px 20px;
+    animation:fadeUp 0.5s ease both;
+  }
+
+  .confirm-mark{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:var(--accent-pale);
+    color:var(--accent-deep);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 20px;
+    font-size:24px;
+  }
+
+  .confirm-title{
+    font-family:'Cormorant Garamond', serif;
+    font-size:26px;
+    font-weight:500;
+    color:var(--accent-deep);
+    margin:0 0 12px;
+  }
+
+  .confirm-detail{
+    font-size:14.5px;
+    color:var(--ink-soft);
+    line-height:1.8;
+    max-width:360px;
+    margin:0 auto 28px;
+  }
+
+  .confirm-detail strong{ color:var(--ink); font-weight:500; }
+
+  .confirm-back{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--ink);
+    padding:10px 20px;
+    border-radius:8px;
+    font-size:14px;
+    cursor:pointer;
+  }
+
+  .hidden{ display:none !important; }
+
+  footer.note{
+    text-align:center;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:56px;
+    opacity:0.8;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="hero">
+    <p class="brand">Σπύρος Αλέξανδρος Ψαρρής</p>
+    <p class="tagline">Ιατρική Αισθητική Δερματολογία</p>
+    <div class="location-tabs">
+      <button class="loc-btn active" data-loc="prague">Πράγα</button>
+      <button class="loc-btn" data-loc="greece">Ελλάδα</button>
+    </div>
+  </header>
+
+  <main id="booking-flow">
+
+    <section class="block">
+      <div class="block-head">
+        <h2 class="block-title">Θεραπεία</h2>
+        <span class="block-hint">επιλέξτε μία</span>
+      </div>
+      <div id="treatment-list"></div>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <h2 class="block-title">Ημερομηνία</h2>
+        <span class="block-hint" id="loc-label">Πράγα</span>
+      </div>
+      <div class="cal-nav">
+        <button id="cal-prev" aria-label="Προηγούμενος μήνας">‹</button>
+        <span class="cal-month-label" id="cal-month-label"></span>
+        <button id="cal-next" aria-label="Επόμενος μήνας">›</button>
+      </div>
+      <div class="cal-grid" id="cal-dow-row"></div>
+      <div class="cal-grid" id="cal-grid" style="margin-top:6px;"></div>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <h2 class="block-title">Ώρα</h2>
+        <span class="block-hint">διάρκεια 30 λεπτά</span>
+      </div>
+      <div id="slots-area">
+        <p class="slots-empty">Επιλέξτε πρώτα ημερομηνία.</p>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <h2 class="block-title">Τα στοιχεία σας</h2>
+      </div>
+      <div class="field" id="field-name">
+        <label for="inp-name">Ονοματεπώνυμο</label>
+        <input type="text" id="inp-name" placeholder="π.χ. Μαρία Παπαδοπούλου">
+        <div class="field-error">Συμπληρώστε το ονοματεπώνυμό σας.</div>
+      </div>
+      <div class="field" id="field-phone">
+        <label for="inp-phone">Τηλέφωνο</label>
+        <input type="tel" id="inp-phone" placeholder="π.χ. 697 1234567">
+        <div class="field-error">Συμπληρώστε ένα τηλέφωνο επικοινωνίας.</div>
+      </div>
+      <div class="field">
+        <label for="inp-email">Email (προαιρετικό)</label>
+        <input type="email" id="inp-email" placeholder="name@example.com">
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="summary-strip" id="summary-strip">
+        Επιλέξτε θεραπεία, ημερομηνία και ώρα για να δείτε τη σύνοψη του ραντεβού σας.
+      </div>
+      <button class="cta" id="submit-btn" disabled>Επιβεβαίωση ραντεβού</button>
+      <p class="form-hint">Θα επικοινωνήσουμε μαζί σας για την τελική επιβεβαίωση.</p>
+    </section>
+
+  </main>
+
+  <div id="confirmation" class="confirm hidden">
+    <div class="confirm-mark">✓</div>
+    <p class="confirm-title">Το ραντεβού σας καταχωρήθηκε</p>
+    <p class="confirm-detail" id="confirm-text"></p>
+    <button class="confirm-back" id="confirm-back-btn">Νέο ραντεβού</button>
+  </div>
+
+  <footer class="note">Σπύρος Αλέξανδρος Ψαρρής · Πράγα &amp; Ελλάδα</footer>
+
+</div>
+
+<script>
+(function(){
+
+  var TREATMENTS = [
+    { id:'botox-upper', name:'Botox – Άνω πρόσωπο', desc:'Μέτωπο, μεσόφρυο, μάτια', price:300 },
+    { id:'botox-full', name:'Botox – Ολόκληρο πρόσωπο', desc:'Άνω και κάτω πρόσωπο', price:500 },
+    { id:'profhilio', name:'Profhilio', desc:'Βαθιά ενυδάτωση και βιοαναγέννηση', price:200 },
+    { id:'pdrn', name:'PDRN – Μεσοθεραπεία DNA σολομού', desc:'2ml, για ολόκληρο πρόσωπο 2×2ml', price:150 },
+    { id:'jalupro', name:'JaluPro Superhydro', desc:'Βαθιά ενυδάτωση με ενίσχυση αμινοξέων', price:200 },
+    { id:'microneedling', name:'Microneedling με BioRePeel', desc:'Χημικό peeling σε συνδυασμό με microneedling', price:100 }
+  ];
+
+  var AVAILABLE_DATES = {
+    prague: [],
+    greece: ['2026-10-25','2026-10-26','2026-10-27']
+  };
+
+  var LOC_LABEL = { prague:'Πράγα', greece:'Ελλάδα' };
+
+  var TIME_SLOTS = ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'];
+
+  var MONTHS_EL = ['Ιανουάριος','Φεβρουάριος','Μάρτιος','Απρίλιος','Μάιος','Ιούνιος','Ιούλιος','Αύγουστος','Σεπτέμβριος','Οκτώβριος','Νοέμβριος','Δεκέμβριος'];
+  var DOW_EL = ['Δε','Τρ','Τε','Πε','Πα','Σα','Κυ'];
+
+  var state = {
+    location: 'prague',
+    treatment: null,
+    date: null,
+    time: null,
+    calYear: 2026,
+    calMonth: 9 // October 2026 (0-indexed)
+  };
+
+  var bookedSlots = {};
+
+  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+  function dateKey(y,m,d){ return y + '-' + pad(m+1) + '-' + pad(d); }
+  function slotKey(loc, date, time){ return loc + '|' + date + '|' + time; }
+
+  async function loadBooked(){
+    try{
+      var r = await window.storage.get('booked-slots', true);
+      bookedSlots = r ? JSON.parse(r.value) : {};
+    }catch(e){
+      bookedSlots = {};
+    }
+  }
+
+  async function saveBooked(){
+    try{
+      await window.storage.set('booked-slots', JSON.stringify(bookedSlots), true);
+    }catch(e){}
+  }
+
+  function renderTreatments(){
+    var list = document.getElementById('treatment-list');
+    list.innerHTML = '';
+    TREATMENTS.forEach(function(t){
+      var row = document.createElement('div');
+      row.className = 'treatment' + (state.treatment === t.id ? ' selected' : '');
+      row.innerHTML =
+        '<div><p class="treatment-name">' + t.name + '</p><p class="treatment-desc">' + t.desc + '</p></div>' +
+        '<div class="treatment-price">' + t.price + '€</div>';
+      row.addEventListener('click', function(){
+        state.treatment = t.id;
+        renderTreatments();
+        updateSummary();
+      });
+      list.appendChild(row);
+    });
+  }
+
+  function renderCalendar(){
+    document.getElementById('cal-month-label').textContent = MONTHS_EL[state.calMonth] + ' ' + state.calYear;
+    document.getElementById('loc-label').textContent = LOC_LABEL[state.location];
+
+    var dowRow = document.getElementById('cal-dow-row');
+    dowRow.innerHTML = '';
+    DOW_EL.forEach(function(d){
+      var el = document.createElement('div');
+      el.className = 'cal-dow';
+      el.textContent = d;
+      dowRow.appendChild(el);
+    });
+
+    var grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+
+    var firstDay = new Date(state.calYear, state.calMonth, 1);
+    var startOffset = (firstDay.getDay() + 6) % 7; // Monday-start
+    var daysInMonth = new Date(state.calYear, state.calMonth + 1, 0).getDate();
+
+    var today = new Date();
+    var todayKey = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+    var available = AVAILABLE_DATES[state.location];
+
+    for(var i=0; i<startOffset; i++){
+      var empty = document.createElement('div');
+      empty.className = 'cal-day empty';
+      grid.appendChild(empty);
+    }
+
+    for(var d=1; d<=daysInMonth; d++){
+      var key = dateKey(state.calYear, state.calMonth, d);
+      var cell = document.createElement('div');
+      var isAvailable = available.indexOf(key) !== -1;
+      cell.className = 'cal-day' + (isAvailable ? ' available' : '') + (key === state.date ? ' selected' : '') + (key === todayKey ? ' today' : '');
+      cell.textContent = d;
+      if(isAvailable){
+        cell.addEventListener('click', function(k){
+          return function(){
+            state.date = k;
+            state.time = null;
+            renderCalendar();
+            renderSlots();
+            updateSummary();
+          };
+        }(key));
+      }
+      grid.appendChild(cell);
+    }
+
+    document.getElementById('cal-prev').disabled = (state.calYear === 2026 && state.calMonth <= 8);
+    document.getElementById('cal-next').disabled = (state.calYear === 2026 && state.calMonth >= 10);
+  }
+
+  function renderSlots(){
+    var area = document.getElementById('slots-area');
+    if(!state.date){
+      area.innerHTML = '<p class="slots-empty">Επιλέξτε πρώτα ημερομηνία.</p>';
+      return;
+    }
+    var grid = document.createElement('div');
+    grid.className = 'slots-grid';
+    TIME_SLOTS.forEach(function(t){
+      var key = slotKey(state.location, state.date, t);
+      var isBooked = !!bookedSlots[key];
+      var el = document.createElement('div');
+      el.className = 'slot' + (isBooked ? ' booked' : '') + (state.time === t ? ' selected' : '');
+      el.textContent = t;
+      if(!isBooked){
+        el.addEventListener('click', function(tt){
+          return function(){
+            state.time = tt;
+            renderSlots();
+            updateSummary();
+          };
+        }(t));
+      }
+      grid.appendChild(el);
+    });
+    area.innerHTML = '';
+    area.appendChild(grid);
+  }
+
+  function findTreatment(){
+    for(var i=0;i<TREATMENTS.length;i++){ if(TREATMENTS[i].id === state.treatment) return TREATMENTS[i]; }
+    return null;
+  }
+
+  function updateSummary(){
+    var strip = document.getElementById('summary-strip');
+    var btn = document.getElementById('submit-btn');
+    var t = findTreatment();
+
+    if(t && state.date && state.time){
+      var d = new Date(state.date + 'T00:00:00');
+      var dateLabel = d.getDate() + ' ' + MONTHS_EL[d.getMonth()] + ' ' + d.getFullYear();
+      strip.innerHTML = '<strong>' + t.name + '</strong> (' + t.price + '€)<br>' +
+        '<strong>' + LOC_LABEL[state.location] + '</strong> · ' + dateLabel + ' · ' + state.time;
+      btn.disabled = false;
+    } else {
+      strip.textContent = 'Επιλέξτε θεραπεία, ημερομηνία και ώρα για να δείτε τη σύνοψη του ραντεβού σας.';
+      btn.disabled = true;
+    }
+  }
+
+  function validateForm(){
+    var nameField = document.getElementById('field-name');
+    var phoneField = document.getElementById('field-phone');
+    var nameVal = document.getElementById('inp-name').value.trim();
+    var phoneVal = document.getElementById('inp-phone').value.trim();
+
+    nameField.classList.toggle('has-error', nameVal.length === 0);
+    phoneField.classList.toggle('has-error', phoneVal.length === 0);
+
+    return nameVal.length > 0 && phoneVal.length > 0;
+  }
+
+  document.getElementById('inp-name').addEventListener('input', function(){
+    document.getElementById('field-name').classList.remove('has-error');
+  });
+  document.getElementById('inp-phone').addEventListener('input', function(){
+    document.getElementById('field-phone').classList.remove('has-error');
+  });
+
+  document.querySelectorAll('.loc-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.loc-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      state.location = btn.getAttribute('data-loc');
+      state.date = null;
+      state.time = null;
+      renderCalendar();
+      renderSlots();
+      updateSummary();
+    });
+  });
+
+  document.getElementById('cal-prev').addEventListener('click', function(){
+    state.calMonth--;
+    if(state.calMonth < 0){ state.calMonth = 11; state.calYear--; }
+    renderCalendar();
+  });
+
+  document.getElementById('cal-next').addEventListener('click', function(){
+    state.calMonth++;
+    if(state.calMonth > 11){ state.calMonth = 0; state.calYear++; }
+    renderCalendar();
+  });
+
+  document.getElementById('submit-btn').addEventListener('click', async function(){
+    if(!validateForm()) return;
+    var t = findTreatment();
+    if(!t || !state.date || !state.time) return;
+
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Επεξεργασία...';
+
+    await loadBooked();
+    var key = slotKey(state.location, state.date, state.time);
+
+    if(bookedSlots[key]){
+      alert('Αυτή η ώρα μόλις κλείστηκε από άλλον πελάτη. Επιλέξτε άλλη ώρα.');
+      renderSlots();
+      btn.textContent = 'Επιβεβαίωση ραντεβού';
+      updateSummary();
+      return;
+    }
+
+    bookedSlots[key] = true;
+    await saveBooked();
+
+    var d = new Date(state.date + 'T00:00:00');
+    var dateLabel = d.getDate() + ' ' + MONTHS_EL[d.getMonth()] + ' ' + d.getFullYear();
+
+    document.getElementById('confirm-text').innerHTML =
+      '<strong>' + t.name + '</strong> (' + t.price + '€)<br>' +
+      '<strong>' + LOC_LABEL[state.location] + '</strong> · ' + dateLabel + ' · ' + state.time + '<br><br>' +
+      document.getElementById('inp-name').value.trim();
+
+    document.getElementById('booking-flow').classList.add('hidden');
+    document.getElementById('confirmation').classList.remove('hidden');
+  });
+
+  document.getElementById('confirm-back-btn').addEventListener('click', function(){
+    state.treatment = null;
+    state.date = null;
+    state.time = null;
+    document.getElementById('inp-name').value = '';
+    document.getElementById('inp-phone').value = '';
+    document.getElementById('inp-email').value = '';
+    renderTreatments();
+    renderCalendar();
+    renderSlots();
+    updateSummary();
+    document.getElementById('confirmation').classList.add('hidden');
+    document.getElementById('booking-flow').classList.remove('hidden');
+    document.getElementById('submit-btn').textContent = 'Επιβεβαίωση ραντεβού';
+  });
+
+  loadBooked().then(function(){
+    renderTreatments();
+    renderCalendar();
+    renderSlots();
+    updateSummary();
+  });
+
+})();
+</script>
+
+</body>
+</html>
